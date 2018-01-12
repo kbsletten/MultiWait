@@ -1,4 +1,8 @@
-﻿using System;
+﻿// https://github.com/kbsletten/MultiWait
+// Copyright (c) 2018 Kyle Sletten
+// Licensed under the MIT license
+// https://github.com/kbsletten/MultiWait/blob/master/LICENSE
+using System;
 using System.Threading.Tasks;
 
 namespace MultiWait
