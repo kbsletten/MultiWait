@@ -37,3 +37,47 @@ This package can be added to a project with NuGet by running:
 
 * `Install-Package MultiWait -Source nuget.org` in Visual Studio NuGet Console
 * `dotnet add package MultiWait` on your command line in a .NET Core project
+
+## Usage
+### Tasks.WhenAll
+This method is the workhorse of this library, allowing you to `await` up to 16
+concurrent tasks all of different types. This differs from
+`System.Threading.Tasks.Task.WhenAll<T>(T...)` in two key ways: This method can
+take arguments of different types (unlike T[]) and it cannot take a different
+number of arguments at runtime (or even more than 16 at compile-time). The main
+utility of this method is to allow you to `await` 2 or more tasks simultaneously
+without creating temporary variables or spreading `await` through your whole
+method.
+
+```
+var (x, y) = await Tasks.WhenAll(GetXAsync(), GetYAsync());
+```
+
+### Tasks.WhenAny
+This method is this library's analog to `System.Threading.Tasks.WhenAny`. It
+allows you to wait for the first of a couple of tasks, getting the result of the
+first and returning the default value for the others.
+
+```
+var (value, cache) = await Tasks.WhenAny(GetValueAsync(), GetCacheAsync());
+if (value != null) return value;
+return MapToValue(cache);
+```
+
+### Tasks.WaitAll
+This method is just like `Tasks.WhenAll` except that it waits the tasks, it
+doesn't `await` them.
+
+```
+var (x, y) = Task.WaitAll(GetXAsync(), GetYAsync());
+```
+
+### Tasks.WaitAny
+This method is just like `Tasks.WhenAny` except that it waits the tasks, it
+doesn't `await` them.
+
+```
+var (value, cache) = Tasks.WaitAny(GetValueAsync(), GetCacheAsync());
+if (value != null) return value;
+return MapToValue(cache);
+```
